@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Genetic Algorithm</title>
+
+	<script data-ad-client="ca-pub-7666337904534694" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+	<meta name="description" content="View and edit a simulation of a genetic algorithm along with a detailed description of how it all works.">
+	<meta name="keywords" content="genetic, algorithm, simulation, ai, artificial, intelligence, machine, learning, generation, iterative, javascript">
+</head>
+<body>
+	<style type="text/css">
+		@media only screen and (max-device-width: 1000px) {
+			/*Mobile*/
+			body {
+				background-color: #7a7a7a;
+				margin-top: -15px;
+				color: white;
+			}
+
+			#canvasDiv {
+				width: 100%;
+				margin-right: auto;
+				margin-left: auto;
+				margin-top: -10px;
+				display: block;
+			}
+			#titleDiv {
+				text-align: center;
+				font-family: Georgia, serif;
+				font-size: 16px;
+				color: white;
+				margin-bottom: -20px;
+			}
+			#simulationDesc {
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 0px;
+				display: block;
+				font-size: 14px;
+			}
+			.dropdownButton {
+				background-color: #eee;
+				color: #444;
+				cursor: pointer;
+				padding: 18px;
+				width: 100%;
+				border: none;
+				text-align: left;
+				outline: none;
+				font-size: 16px;
+				transition: 0.4s;
+			}
+			.numberInput {
+				-webkit-border-radius: 20px;
+				-moz-border-radius: 20px;
+				border-radius: 5px;
+				border: 1px solid;
+				width: 100px;
+				height: 14px;
+				padding-left: 10px;
+				margin-top: 5px;
+			}
+			#play_pause_control_b, #reset_pop_b, #reset_para_b {
+				-webkit-border-radius: 20px;
+				-moz-border-radius: 20px;
+				border-radius: 5px;
+				background-color: #ffffff;
+				color: black;
+				font-size: 16px;
+				height: 28px;
+				width: 100%;
+			};
+		}
+		
+		@media only screen and (min-device-width: 1000px) {
+			/*Desktop*/
+			body {
+				background-color: #7a7a7a;
+				margin-top: -45px;
+				color: white;
+				margin-left: 5vw;
+				margin-right: 5vw;
+			}
+
+			#canvasDiv {
+				width: 90%;
+				margin-right: auto;
+				margin-left: auto;
+				margin-top: -40px;
+				display: block;
+			}
+			#titleDiv {
+				text-align: center;
+				font-family: Georgia, serif;
+				font-size: 28px;
+				color: white;
+			}
+			#simulationDesc {
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 0px;
+				display: block;
+			}
+			.dropdownButton {
+				background-color: #eee;
+				color: #444;
+				cursor: pointer;
+				padding: 18px;
+				width: 100%;
+				border: none;
+				text-align: left;
+				outline: none;
+				font-size: 20px;
+				transition: 0.4s;
+			}
+			.numberInput {
+				-webkit-border-radius: 20px;
+				-moz-border-radius: 20px;
+				border-radius: 5px;
+				border: 1px solid;
+				width: 100px;
+				height: 20px;
+				padding-left: 10px;
+				margin-top: 5px;
+			}
+			#play_pause_control_b, #reset_pop_b, #reset_para_b {
+				-webkit-border-radius: 20px;
+				-moz-border-radius: 20px;
+				border-radius: 5px;
+				background-color: #ffffff;
+				color: black;
+				font-size: 16px;
+				width: 150px;
+			};
+		}
+
+		#cookieDisclosure {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			background-color: black;
+			height: auto;
+			padding-left: 10px;
+			padding-bottom: 7px;
+		}
+
+		#disclosureButtons {
+			margin-top: -5px;
+		}
+
+		.disclosureButton {
+			-webkit-border-radius: 20px;
+			-moz-border-radius: 20px;
+			border-radius: 5px;
+			width: 225px;
+			height: 30px;
+			font-size: 12px;
+			float: left;
+			margin-top: 10px;
+			margin-left: 3px;
+		}
+
+		#disclosureText {
+			float: left;
+			margin-bottom: 1px;
+			font-size: 20px;
+		}
+
+		.agreeButton {
+			background-color: green;
+			font-size: 16px;
+		}
+
+		canvas {
+			margin-right: auto;
+			margin-left: auto;
+			display: block;
+		}
+
+		footer {
+			position: relative;
+			bottom: 0;
+			width: 100%;
+			height: 2.5rem;
+		}
+
+		#bodyContainer {
+			width: 100%;
+			font-family: Verdana, sans-serif;
+		}
+		
+		.active, .dropdownButton:hover {
+			background-color: #ccc;
+		}
+
+		.panel {
+			padding: 0 18px;
+			display: none;
+			background-color: white;
+			overflow: hidden;
+		}
+
+		img {
+			width: 100%;
+			max-width: 605px;
+			height: auto;
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	</style>
+	<div id="bodyContainer">
+		<div id="titleDiv">
+			<h1 id="titleText">Genetic Algorithm Simulation</h1>
+		</div>
+		<div id="canvasDiv" onresize="onScreenSizeChange();">
+			<p id="simulationDesc"><i>Below is a simulation which is using a genetic algorithm to allow the white rectangles to reach the red target. Scroll down to find more information about how this works and to edit the parameters of the simulation.</i></p>
+		</div>
+		<hr>
+		<div id="parameterDiv">
+			<button class="dropdownButton">Edit The Simulation</button>
+			<div class="parameterGroup" style="display: none;">
+				<p id="simulationDesc" style="margin-top: 0px;"><i>Below are the options you can edit to alter the results of the learning (they are called hyperparameters as they control the learning process). Scroll down to the "How does this work?" section to see the impact that they have on the simulation.</i></p>
+				<label for="popSize">Population Size (<i>p</i>):</label>
+				<input class="numberInput" type="number" id="popSize" name="popSize" min="10" max="500" step="10" onchange="updatePopSize()">
+				<br>
+				<label for="fRate">Frame rate:</label>
+				<input class="numberInput" type="number" id="fRate" name="fRate" min="2" max="240" step="2" onchange="updateFrameRate()">
+				<br>
+				<label for="seqLength">Sequence Length (<i>s</i>):</label>
+				<input class="numberInput" type="number" id="seqLength" name="seqLength" min="10" max="400" step="5" onchange="updateSeq()">
+				<br>
+				<label for="mutationRate">Mutation Rate (<i>m<sub>r</sub></i>):</label>
+				<input class="numberInput" type="number" id="mutationRate" name="mutationRate" min="0" max="1" step="0.001" onchange="updateMutationRate()">
+				<br>
+				<label for="mutationDecay">Mutation Decay Rate (<i>m<sub>d</sub></i>):</label>
+				<input class="numberInput" type="number" id="mutationDecay" name="mutationDecay" min="0" max="1" step="0.05" onchange="updateMutationDecay()">
+				<br>
+				<label for="minMutation">Minimum Mutation Rate (<i>m<sub>m</sub></i>):</label>
+				<input class="numberInput" type="number" id="minMutation" name="minMutation" min="0" max="1" step="0.0001" onchange="updateMutationMin()">
+				<br>
+				<label for="showPath">Show Path Taken:</label>
+				<input type="checkbox" id="showPath" name="showPath" onchange="updateShowPath();">
+				<br>
+				<label for="barrierInput">Barrier Type:</label>
+				<select id="barrierInput" name="barrierInput" onchange="updateBarrier()">
+					<option value="0">No Barrier</option>
+					<option value="1" selected>Simple Barrier</option>
+					<option value="2">U-Shaped Barrier</option>
+					<option value="3">Flashing Barrier</option>
+					<option value="4">Gap Barrier</option>
+					<option value="5">Zig-Zag</option>
+				</select>
+				<br>
+				<br>
+				<button id="play_pause_control_b" onclick="play_pause_control()">Pause</button>
+				<button id="reset_para_b" onclick="reset_parameters()">Reset Parameters</button>
+				<button id="reset_pop_b" onclick="cell_pop.reset()">Reset Population</button>
+			</div>
+		</div>
+		<hr>
+		<div id="explanationDiv">
+			<button class="dropdownButton">How does this work?</button>
+			<div class="explanationGroup" style="display: block;">
+				<h3>What Is A Genetic Algorithm?</h3>
+				<p>A genetic algorithm is a meta-heuristic machine learning algorithm which makes use of the ideas of natural selection, generations and survival-of-the-fittest. A meta-heuristic algorithm means that it can be applied to a range of different of problems and that is true of genetic algorithms as the same algorithm can be used for a number of different environments and problems. So how does a genetic algorithm work? A genetic algorithm can be broken down into 3 main steps: generation, testing and selection. The first stage is to randomly generate a population for the first generation where each member has a random set of "DNA". This "DNA" decides what action each member of the population will do. Once the population has been generated they are placed in to the environment tested against the given problem, then depending on how close each member of the population is to the desired to desired result depends of good of a fitness it receives. The fitness is a measure of how good a member performs and for this example a higher fitness is better however this can vary from program to program. The final major stage in a genetic algorithm is selection, this is when the population for the following generation is created. To allow the population to develop the stronger performing members of society need to be separated from the weaker members of society, this can be done by making the stronger members more likely to "reproduce" in to the next generation. This "reproduction" happens through something called crossover function. Typically two members of the population, with an increasingly likelihood that they are strong members, are chosen. A crossover function takes in the genomes (all of the "DNA") from both of the random members and then it crosses the genes over to form a resultant genome which then can be used to create a new member for the following generation. There are many ways that the genomes can be crossed over to create the new genome but some common methods are: to take the first half of the first genome and take the second half of the second genome, take the first gene from the first genome and then take the second from the second genome and this continues until the end of the genome is reached, chose a single point on the in the genome, called the crossover point, and take all the genes before the crossover point from the first genome and take all genes after the crossover point from the second genome. To allow new methods and strategies to develop amongst the generation there needs to be a way that new, random, genes can come about. This happens during the crossover function where there is a chance that a given gene will mutate for the next generation. In addition to this the model can have an adaptive mutation chance, this means that the probability that a gene will mutate will change as the generations go on and this is advantageous as initially it is important for the population to be able explore lots of random strategies whereas later in the evolutionary process it is better for the genome to mutate less to allow the population to refine a single strategy. In conclusion that is how a typically genetic algorithm would work however some of the aspects may change based on the desired result and the environment the algorithm is going to be used in.</p>
+				<br>
+				<h3>Advantages And Disadvantages Of A Genetic Algorithm</h3>
+				<p>The advantages of using a genetic algorithm compared to other machine learning algorithms are: they can easily be applied to lots of different problems with little modification, genetic algorithms can be better at finding the global optimum solution compared to just finding the local optimum, it can be computed in parallel which can allow the solution to be calculated faster and with the idea of random mutations it allows for lots of possible solutions to be explored.
+				<br><br>
+				The disadvantages of using a genetic algorithm compared to other machine learning algorithms are: a fitness function needs to be carefully created to reflect the problem otherwise the results will be inaccurate, there are lots of parameters such as population size, mutation rate, genome length and crossover functions which can affect results so it can be time consuming to adjust each parameter to get the optimum results and if the problem is complex then it can take a long time for the algorithm to find an optimum solution.</p>
+				<br>
+				<h3>How Does This Simulation Work?</h3>
+				<p>Firstly, if you are unfamiliar with how a genetic algorithm works I recommend reading the "What is a genetic algorithm?" section before reading this. This simulation is written in JavaScript along with the p5.js library for the visuals.<br><br>In this simulation I am going to refer to each member of the population as a cell and I am going to refer to each cell's "DNA" as the sequence. This first stage of the genetic algorithm in the simulation is to generate a population of size,  <i>p</i>. Each cell is given a random sequence of length <i>s</i> and the sequence really is is an <i>s</i> length array of 2D vectors.<br><br>Then every frame, the next vector in the sequence is added to the velocity of the cell and then the velocity is added to the <i>(x,y)</i> coordinate values of that cell. After the position of each cell has been updated, the location of that cell is checked to see if it has crashed in to a barrier, a wall or if it has made it to the target. All the barriers in a certain environment are stored as a 1D array of barrier objects and each object has the attributes: x coordinate, y coordinate, width and height. Since all the environment obstacles are made up of rectangular barriers it is possible to iterate through all of the barriers and check if the <i>(x,y)</i> is within any of the barrier rectangles. It is a lot simpler to check if the cell has crashed in to the walls as, as long as the cells <i>x</i> is between 0 and the width of the environment and the cells <i>y</i> is between 0 and the height of the environment then we know the cell hasn't crashed in to the wall. The target is a circle so to check if the cell has reached the target then all that needs to be done is to check if distance from the cell to the center of the target  is equal to or less than the radius of the circle, and if it is then we know the cell has reached the target. If the cell has crashed or reached the target then its position isn't updated for the rest of the generation. Every frame the frame counter is incremented by 1 so once the frame counter is equal to the length of the cells' sequence that is the end of generation.<br><br>The next step is to calculate the fitness values for each cell, there are 3 categories that the cells can be placed in to depending on how well they performed in the environment: the ones who crashed, the ones who didn't crash but didn't make it to the target and those who made it to the target. The formula to calculate the fitness for the cells that made it is <i>f = 1+(1/frames taken to reach the target).</i> It is important that the number of steps taken to reach the target is taken in to consideration as the cells that reach the target faster/in less frames are stronger and therefore should receive a higher fitness compared to the slower cells. The formula to calculate the fitness for the cells that crash is <i>f = (1/distance from the target)*crash value.</i> By doing 1 divided by the distance means that the higher/further the distance then lower the fitness will be. The crash value is a number between 0 and 1 where if it is 0 the cells that crash get a fitness value of 0 and if it is 1 then the cell will receive the same fitness as a cell that got to the same distance away from the target but didn't crash. This value is significant as it controls how detrimental crashing is to a cells chance at passing its sequence on to the next generation. The final fitness formula is for the cells that don't crash but also don't make it to the target, this is simply calculated by the formula <i>f = 1/distance from the target</i>, which as you can see is very similar to the previous formula but not identical. The final part of this step is to scale the cells fitness value between 0.01 and 1 (this will be explained later).<br><br>The next step of the simulation is to generate a new gene pool for the next generation to choose from, this is done by taking cells' fitness value and then multiplying it by 100 and adding that number of copies of that cells sequence to the gene pool. This sounds more complicated than it is so here's an example: let's imagine that cell A has a fitness of 0.09, we multiply this by 100 to get 9, this means 9 identical copies of cell A's sequence is added to the gene pool. The higher the cells fitness the more copies of that sequence will be added to the gene pool thus making that sequence more likely to be chosen in the next stage. The reason the fitness value for the cell is scaled between 0.01 and 1 is so that the weakest cell has only 1 copy of its sequence in the gene pool while the strongest cell has 100 copies of its sequence in the gene pool. This is repeated for all cells in the current generation.<br><br>Once this has been done we move on to creating the following generations population, this is done by choosing 2 random sequences from the gene pool. To make the sequence for the new cell a crossover function is used where the first half of the new cell's sequence is copied from the first half of the first random sequence and the second half of the new cells sequence is copied from the second half of the second random sequence(as seen in the image below).<br><br><img src="crossover_img.png"><br>During the crossover function is where the concept of mutations take effect, for every vector copied from one sequence to another there is a probability that it won't be copied and instead it will become a new random vector. The probability of a mutation is calculated by the formula <i>probability = max(mutation rate*(mutation decay^generation), minimum mutation rate).</i> The mutation rate is an initial parameter which is used as a base mutation rate where all the other mutation rates are derived from, the mutation decay is a number between 0 and 1 and this represents how much the probability of a will decrease from one generation to the next. For example if the mutation decay was equal to 0.8 this means the that the probability of mutation on the second generation is 0.8 times (or 80%) the probability of mutation on the first generation and the probability on the third generation is a further 0.8 times (or 80%) the probability of mutation on the second generation so on and so on. As the generation number increases the probability of mutations decreases and it will get to a point where the chance of a mutation is so low that in a population of 200 cells a single mutation might only occur once every 100 generation this then makes it difficult for the cells to even fine-tune existing strategies so this is why there is the minimum mutation rate. If the calculated mutation rate drops below the minimum mutation rate then the probability is just set to the minimum mutation rate. This is done so that as the simulation progresses the existing strategies can be fine-tuned as the chance of new mutations and strategies arising is lower hopefully allowing the optimum solution to be found. This process of choosing 2 random sequences from the gene pool, crossing them over and then creating a new cell is repeated until a new population is created of size <i>p</i>.<br><br>Then next generation population is tested in the environment and the cycle repeats allowing the population to improve each generation until the optimal solution is found. <br><br> If you wish to look through the source code right-click then press page source where you should then be able to navigate to "script.js" which is all the code for the genetic algorithm.</p>
+				<br>
+				<h3>Explanation Of The Different Parameters And Their Effect On The Results</h3>
+				<p><b><i>Population Size (p)</i></b> - This is the number of cells in each generation, this remains constant for each generation. With more cells in the population there is a higher chance that beneficial mutations will occur allowing the population to develop and improve faster however with a larger population size this requires more computing power so setting this too high can cause the simulation to slow down meaning it takes longer to find the solution. Changing this will cause the simulation to reset back to the beginning. <br><br><b><i>Frame Rate</i></b> - This is the target number of frames per second for the simulation, if there is too little computing power then the actual frames per second will be lower than this number.<br><br><b><i>Sequence Length (s)</i></b> - This is the number of 2D vectors within the sequence of each cell. If this is too low then the cells will never be able to reach the optimal solution, if this is too high then this could result in the algorithm optimising unnecessary values or it could increase the time taken to find the optimum and instead end up finding a suboptimal solution. Changing this will cause the simulation to reset back to the beginning.<br><br><b><i>Mutation Rate (m<sub>r</sub>)</i></b> - This is the starting probability that a given vector is randomised during the crossover function. This will always be between 0 and 1 where the higher it is the more likely a mutation will occur. Changing this will cause the simulation to reset back to the beginning.<br><br><b><i>Mutation Decay Rate (m<sub>d</sub>)</i></b> - This is how much the mutation rate will decrease by from one generation to the next. This is is between 0 and 1 and, for example, if the mutation decay rate was 0.75 this means that the new probability of a mutation is 0.75 times (or 75%) of the probability of mutation in the previous generation.<br><br><b><i>Minimum Mutation Rate (m<sub>m</sub>)</i></b> - This is smallest the probability of a mutation can be for example if the calculated probability is 0.04 but the minimum mutation rate is 0.1 then the probability of mutation will be set to 0.1.<br><br><b><i>Show Path</i></b> - If this is selected then a line will be drawn behind behind the cells so you can see the path it has taken to get to its current location. This is useful as it allows the general trend of the population to easily be visualized.<br><br><b><i>Barrier Type</i></b> - This allows you to change the environment that the cells are placed in. If you make the environment more more difficult and the cells are unable to complete it try increase the sequence length and vice versa if you make it easier, decrease the sequence length. Changing this will cause the simulation to reset back to the beginning.</p>
+			</div>
+		</div>
+		<footer>
+			<hr>
+			<p>Thank you for checking out my website! <a href="/privacy_policy.html" target="_blank">Privacy Policy</a> &#169 2021 F. Hunt Email: <a href="mailto:geneticsim@gmail.com">geneticsim@gmail.com</a></p>
+		</footer>
+		<div id="cookieDisclosure">
+			<p id="disclosureText">This site uses cookies to improve your experience. By using this site you agree to our use of cookies, you can find more information <a href="/privacy_policy.html" target="_blank">here.</a></p>
+			<div id="disclosureButtons">
+				<button class="disclosureButton agreeButton" id="cookieAgreeButton" onclick="cookieAgree();"><b>I Understand</b></button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var cookieDisclosureDiv = document.getElementById("cookieDisclosure");
+		var acc = document.getElementsByClassName("dropdownButton");
+		var i;
+
+		for (i = 0; i < acc.length; i++) {
+			acc[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var panel = this.nextElementSibling;
+				if (panel.style.display === "block") {
+					panel.style.display = "none";
+				} else {
+					panel.style.display = "block";
+				};
+			});
+		};
+
+		function cookieAgree() {
+			cookieDisclosureDiv.style.display = "none";
+		};
+	</script>
+	<script src="script.js"></script>
+</body>
+</html>
