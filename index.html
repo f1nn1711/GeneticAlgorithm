@@ -2,8 +2,6 @@
 <html>
 <head>
 	<title>Genetic Algorithm</title>
-
-	<script data-ad-client="ca-pub-7666337904534694" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
@@ -136,45 +134,6 @@
 				width: 150px;
 			};
 		}
-
-		#cookieDisclosure {
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			width: 100%;
-			background-color: black;
-			height: auto;
-			padding-left: 10px;
-			padding-bottom: 7px;
-		}
-
-		#disclosureButtons {
-			margin-top: -5px;
-		}
-
-		.disclosureButton {
-			-webkit-border-radius: 20px;
-			-moz-border-radius: 20px;
-			border-radius: 5px;
-			width: 225px;
-			height: 30px;
-			font-size: 12px;
-			float: left;
-			margin-top: 10px;
-			margin-left: 3px;
-		}
-
-		#disclosureText {
-			float: left;
-			margin-bottom: 1px;
-			font-size: 20px;
-		}
-
-		.agreeButton {
-			background-color: green;
-			font-size: 16px;
-		}
-
 		canvas {
 			margin-right: auto;
 			margin-left: auto;
@@ -283,36 +242,9 @@
 		</div>
 		<footer>
 			<hr>
-			<p>Thank you for checking out my website! <a href="/privacy_policy.html" target="_blank">Privacy Policy</a> &#169 2021 F. Hunt Email: <a href="mailto:geneticsim@gmail.com">geneticsim@gmail.com</a></p>
+			<p>Thank you for checking out my website! &#169 2021 F. Hunt Email: <a href="mailto:hunt.finn@gmail.com">hunt.finn@gmail.com</a></p>
 		</footer>
-		<div id="cookieDisclosure">
-			<p id="disclosureText">This site uses cookies to improve your experience. By using this site you agree to our use of cookies, you can find more information <a href="/privacy_policy.html" target="_blank">here.</a></p>
-			<div id="disclosureButtons">
-				<button class="disclosureButton agreeButton" id="cookieAgreeButton" onclick="cookieAgree();"><b>I Understand</b></button>
-			</div>
-		</div>
 	</div>
-	<script type="text/javascript">
-		var cookieDisclosureDiv = document.getElementById("cookieDisclosure");
-		var acc = document.getElementsByClassName("dropdownButton");
-		var i;
-
-		for (i = 0; i < acc.length; i++) {
-			acc[i].addEventListener("click", function() {
-				this.classList.toggle("active");
-				var panel = this.nextElementSibling;
-				if (panel.style.display === "block") {
-					panel.style.display = "none";
-				} else {
-					panel.style.display = "block";
-				};
-			});
-		};
-
-		function cookieAgree() {
-			cookieDisclosureDiv.style.display = "none";
-		};
-	</script>
 	<script src="script.js"></script>
 </body>
 </html>
